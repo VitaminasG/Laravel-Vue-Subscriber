@@ -1,0 +1,10 @@
+//Box Shadow
+// offset-x | offset-y | blur-radius | spread-radius | color
+@mixin myShadow($where, $a, $b, $c){
+  .my-shadowBox-#{$where}{
+      box-shadow: 0 $a $b $c rgba(0,0,0,.075) !important;
+    }
+}
+
+@include myShadow("top", -.01rem, .25rem, .01rem);
+@include myShadow("bottom", .01rem, .25rem, .01rem);

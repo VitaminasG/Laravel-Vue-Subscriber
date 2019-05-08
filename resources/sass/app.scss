@@ -1,0 +1,14 @@
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Setup import's
+@import "setup/reset";
+@import "setup/variables";
+@import "setup/util";
+@import "setup/font_respon";
+@import "setup/layout_mixins";
+
+// Activate to control separate font el. Exp: h1, h2... p
+//@import "setup/font_mixins";
+
+@import "basic/base";

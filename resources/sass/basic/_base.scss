@@ -1,0 +1,27 @@
+body {
+  background-color: $bg-color;
+  font-family: $font-stack;
+  text-decoration: none;
+  color: $font-color;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation{
+  position: sticky;
+  top:0;
+  width: 100%;
+  z-index: 9999;
+  border-bottom: 2px solid $light-grey;
+  padding: 1.5rem;
+  background: $white;
+}
+
+footer{
+  position: sticky;
+  bottom: 0;
+  border-top: 2px solid $light-grey;
+  margin-top: auto;
+  padding: 1.5rem;
+  background: $white;
+}

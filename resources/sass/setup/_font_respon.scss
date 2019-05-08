@@ -1,0 +1,22 @@
+// Code stolen from -> https://codepen.io/MadeByMike/pen/YPJJYv?editors=110
+
+// These values are the minimum and maximum viewport sizes to apply the font scaling
+$min_width: 375;
+$max_width: 1200;
+// These values effect the base font-size, headings and other elements will scale proportionally
+$min_font: 8;
+$max_font: 18;
+
+:root { font-size: #{$min_font}px; }
+
+@media (min-width: #{$min_width}px) and (max-width: #{$max_width}px){
+  :root {
+    font-size: calc( #{$min_font}px + (#{$max_font} - #{$min_font})
+    * ( (100vw - #{$min_width}px) / ( #{$max_width} - #{$min_width}) ));
+  }
+}
+@media (min-width: #{$max_width}px){
+  :root {
+    font-size: #{$max_font}px;
+  }
+}

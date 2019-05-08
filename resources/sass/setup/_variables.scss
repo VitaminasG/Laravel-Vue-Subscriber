@@ -1,0 +1,33 @@
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66D9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+$grey: #646464;
+$light-grey: #ebebeb;
+$dark-body: #121212;
+$white: #fff;
+
+// Custom Colors
+$alert: #ffd886;
+$success: #86c148;
+$bg-color: #d2e1ff;
+
+// Font Rules
+$font-color: #434343;
+$font-stack: 'Slabo 27px', Georgia, Times, Times New Roman, serif;
+$font-sizeDefault: 1rem;
+$font-shadow: 0 0 .1rem rgba(0,0,0,.075);
+
+// Activate if have Custom Font to add
+
+// $font-path: './path/to/font/';
+// $font-custName: "Anything Type here";
+// $font-name: $font-custName, Courier New;
+//
+// @font-face { font-family: $font-custName; font-weight: normal; src: url("#{$font-path}clacon.ttf"); }
