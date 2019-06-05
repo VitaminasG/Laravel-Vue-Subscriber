@@ -1821,6 +1821,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 //
 //
 //
@@ -1920,25 +1930,243 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SubscribeComponent",
   data: function data() {
     return {
-      text: "BLA BLA",
+      step1: false,
+      step2: false,
       form: {
         name: '',
         surname: '',
-        email: ''
+        email: '',
+        telephone: '',
+        gender: null,
+        dof: {
+          day: '',
+          month: '',
+          year: ''
+        },
+        comments: ''
       },
+      options: [{
+        value: null,
+        text: 'Select Gender' + ' v'
+      }, {
+        value: 'Female',
+        text: 'Female'
+      }, {
+        value: 'Male',
+        text: 'Male'
+      }, {
+        value: 'Both',
+        text: 'Both'
+      }],
       show: true
     };
   },
   methods: {
-    onSubmit: function onSubmit(evt) {
-      evt.preventDefault();
-      this.$root.$emit('bv::toggle::collapse', 'accordion-1');
-      this.$root.$emit('bv::toggle::collapse', 'accordion-2');
-      alert(JSON.stringify(this.form));
+    levelOne: function levelOne(e) {
+      e.preventDefault();
+
+      if (this.checkLength(this.form.name, 5) && this.checkLength(this.form.surname, 5)) {
+        if (this.checkEmail(this.form.email)) {
+          this.step1 = true;
+          this.$root.$emit('bv::toggle::collapse', 'accordion-1');
+          this.$root.$emit('bv::toggle::collapse', 'accordion-2');
+        } else {
+          alert('Incorrect email address!');
+        }
+      } else {
+        alert('Your Name or Surname is too short!');
+      }
+    },
+    levelTwo: function levelTwo(e) {
+      e.preventDefault();
+
+      if (this.checkPhone(this.form.telephone)) {
+        if (!this.form.gender) {
+          alert('Please choose your Gender!');
+        } else {
+          if (this.checkBof(this.form.dof.day, this.form.dof.month, this.form.dof.year)) {
+            this.step2 = true;
+            this.$root.$emit('bv::toggle::collapse', 'accordion-2');
+            this.$root.$emit('bv::toggle::collapse', 'accordion-3');
+          } else {
+            alert('Date of birth is incorrect!');
+          }
+        }
+      } else {
+        alert('Incorrect phone number!');
+      }
+    },
+    levelThree: function levelThree(e) {
+      e.preventDefault();
+      var stepState = new Map([['1', this.step1], ['2', this.step2]]);
+      var state = false;
+      var missingField = '';
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = stepState[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _step$value = _slicedToArray(_step.value, 2),
+              key = _step$value[0],
+              value = _step$value[1];
+
+          if (!value) {
+            alert('A Step' + key + ' have some missing fields!');
+            missingField = key;
+            state = false;
+            break;
+          } else {
+            state = true;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      if (!state) {
+        this.$root.$emit('bv::toggle::collapse', 'accordion-3');
+        this.$root.$emit('bv::toggle::collapse', 'accordion-' + missingField);
+      } else {
+        this.$root.$emit('bv::toggle::collapse', 'accordion-3');
+        this.submit();
+      }
+    },
+    checkLength: function checkLength(item, length) {
+      return item.length > length;
+    },
+    checkEmail: function checkEmail(email) {
+      if (this.checkLength(email, 0)) {
+        var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regEx.test(String(email).toLowerCase());
+      }
+    },
+    checkPhone: function checkPhone(phone) {
+      var regEx = /^\d+$/;
+      return !!(this.checkLength(phone, 10) && regEx.test(phone));
+    },
+    checkBof: function checkBof(day, month, year) {
+      var regEx = /^\d+$/;
+      var array = [day, month, year];
+      var state = false;
+
+      if (this.checkLength(day, 1) && this.checkLength(month, 1)) {
+        if (this.checkLength(year, 3)) {
+          for (var _i2 = 0, _array = array; _i2 < _array.length; _i2++) {
+            var e = _array[_i2];
+
+            if (!regEx.test(e)) {
+              alert(e + ' is not a number');
+              state = false;
+              break;
+            } else {
+              state = true;
+            }
+          }
+
+          return state;
+        } else {
+          alert('Incorrect year!');
+          return state;
+        }
+      } else {
+        alert('Incorrect day or month!');
+        return state;
+      }
+    },
+    submit: function submit() {
+      var _this = this;
+
+      var message = '';
+      var data = {
+        fName: this.form.name,
+        lName: this.form.surname,
+        email: this.form.email,
+        mobile: this.form.telephone,
+        gender: this.form.gender,
+        DOB: this.form.dof.day + '/' + this.form.dof.month + '/' + this.form.dof.year,
+        comments: this.comments
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/subscribe', data).then(function (response) {
+        console.log(response.data);
+
+        _this.showMsgBoxTwo(response.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    showMsgBoxTwo: function showMsgBoxTwo(message) {
+      this.$bvModal.msgBoxOk(message, {
+        size: 'md',
+        buttonSize: 'md',
+        okVariant: 'success',
+        headerClass: 'p-2 border-bottom-0',
+        footerClass: 'p-2 border-top-0',
+        centered: true
+      });
     }
   }
 });
@@ -29029,7 +29257,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbody[data-v-5b4cfafe]{\n    font-family: Arial,sans-serif;\n}\n.form-collapse[data-v-5b4cfafe]{\n    font-family: \"Myriad Pro\", sans-serif;\n    font-size: 16px;\n    line-height: 1.125;\n}\n.form-control[data-v-5b4cfafe]{\n    width: auto;\n    border-radius: 10px;\n    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);\n}\n.form-control#input-1[data-v-5b4cfafe]  {\n    margin-right: 1rem;\n}\n.next[data-v-5b4cfafe]{\n    border-radius: 10px;\n    background-image: linear-gradient(to bottom, #424cb4, #4f51b9, #5b57bf, #665cc4, #7162ca);\n    padding: 0.5rem 2rem;\n}\n.card[data-v-5b4cfafe]{\n    border-radius: 10px;\n    background-color: rgb(255, 255, 255);\n    box-shadow: 0 0 27px rgba(29, 33, 36, 0.2);\n}\n.card-header[data-v-5b4cfafe]:first-child{\n    padding-top: 5px;\n}\n.card-header[data-v-5b4cfafe]:last-child{\n    padding-bottom: 5px;\n}\n.card-header[data-v-5b4cfafe]{\n    padding: 3px 5px 3px 5px;\n    background-color: transparent !important;\n    border-bottom: none !important;\n    z-index: 10;\n}\n.btn[data-v-5b4cfafe]{\n    font-size: 16px;\n    font-family: Arial,sans-serif;\n    color: rgb(255, 255, 255);\n    line-height: 1.125;\n    text-align: left;\n    text-shadow: 0 1px 0 rgba(104, 104, 104, 0.8);\n}\n.btn-info[data-v-5b4cfafe]{\n    border-radius: 10px;\n    color: #fff;\n    background-color: #ffc600;\n    border-color: transparent;\n    background-image: linear-gradient(to bottom, #fdc401, #fabc04, #f6b307, #f2ab0b, #eea30e);\n    height: 59px;\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe],\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]{\n    color: #fff;\n    border-color: transparent;\n    background-image: inherit;\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe],\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]{\n    border-color: transparent;\n    background-image: linear-gradient(to bottom, #fdc401, #fabc04, #f6b307, #f2ab0b, #eea30e);\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active:focus,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe]:focus,\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]:focus{\n    box-shadow: 0 0 0 0.2rem rgba(242, 171, 11, 0.5);\n}\n.btn-info[data-v-5b4cfafe]:focus, .btn-info.focus[data-v-5b4cfafe]{\n    box-shadow: none;\n}\n.card-body[data-v-5b4cfafe]{\n    margin: -15px 5px 5px 5px;\n    border-top-right-radius: 0px;\n    border-top-left-radius: 0px;\n    border-bottom-right-radius: 10px;\n    border-bottom-left-radius: 10px;\n    background: #dedede;\n    z-index: 1;\n}\n", ""]);
+exports.push([module.i, "\nbody[data-v-5b4cfafe]{\n    font-family: Arial,sans-serif;\n}\n.form-collapse[data-v-5b4cfafe]{\n    font-family: \"Myriad Pro\", sans-serif;\n    font-size: 16px;\n    line-height: 1.125;\n}\n.form-control[data-v-5b4cfafe]{\n    width: auto;\n    border-radius: 10px;\n    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);\n}\n.comment[data-v-5b4cfafe] {\n    width: 100%;\n}\n.form-control#input-1[data-v-5b4cfafe]  {\n    margin-right: 1rem;\n}\n.next[data-v-5b4cfafe]{\n    border-radius: 10px;\n    background-image: linear-gradient(to bottom, #424cb4, #4f51b9, #5b57bf, #665cc4, #7162ca);\n    padding: 0.5rem 2rem;\n}\n.card[data-v-5b4cfafe]{\n    border-radius: 10px;\n    background-color: rgb(255, 255, 255);\n    box-shadow: 0 0 27px rgba(29, 33, 36, 0.2);\n}\n.card-header[data-v-5b4cfafe]:first-child{\n    padding-top: 5px;\n}\n.card-header[data-v-5b4cfafe]:last-child{\n    padding-bottom: 5px;\n}\n.card-header[data-v-5b4cfafe]{\n    padding: 3px 5px 3px 5px;\n    background-color: transparent !important;\n    border-bottom: none !important;\n    z-index: 10;\n}\n.btn[data-v-5b4cfafe]{\n    font-size: 16px;\n    font-family: Arial,sans-serif;\n    color: rgb(255, 255, 255);\n    line-height: 1.125;\n    text-align: left;\n    text-shadow: 0 1px 0 rgba(104, 104, 104, 0.8);\n}\n.btn-info[data-v-5b4cfafe]{\n    border-radius: 10px;\n    color: #fff;\n    background-color: #ffc600;\n    border-color: transparent;\n    background-image: linear-gradient(to bottom, #fdc401, #fabc04, #f6b307, #f2ab0b, #eea30e);\n    height: 59px;\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe],\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]{\n    color: #fff;\n    border-color: transparent;\n    background-image: inherit;\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe],\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]{\n    border-color: transparent;\n    background-image: linear-gradient(to bottom, #fdc401, #fabc04, #f6b307, #f2ab0b, #eea30e);\n}\n.btn-info[data-v-5b4cfafe]:not(:disabled):not(.disabled):active:focus,\n.btn-info:not(:disabled):not(.disabled).active[data-v-5b4cfafe]:focus,\n.show > .btn-info.dropdown-toggle[data-v-5b4cfafe]:focus{\n    box-shadow: 0 0 0 0.2rem rgba(242, 171, 11, 0.5);\n}\n.btn-info[data-v-5b4cfafe]:focus, .btn-info.focus[data-v-5b4cfafe]{\n    box-shadow: none;\n}\n.card-body[data-v-5b4cfafe]{\n    margin: -15px 5px 5px 5px;\n    border-radius: 0 0 10px 10px;\n    background: #dedede;\n    z-index: 1;\n}\n.custom-select[data-v-5b4cfafe] {\n    color: #737171;\n    border-radius: 10px;\n    background: linear-gradient(0deg, rgba(85,85,85,0.2) 0%, rgba(255, 255, 255, 1) 50%);\n    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);\n}\n.dof[data-v-5b4cfafe] {\n    width: 50px;\n}\n", ""]);
 
 // exports
 
@@ -50653,9 +50881,20 @@ var render = function() {
             "b-card-header",
             { attrs: { "header-tag": "header", role: "tab" } },
             [
-              _c("b-button", { attrs: { block: "", variant: "info" } }, [
-                _vm._v("Step 1: Your details")
-              ])
+              _c(
+                "b-button",
+                {
+                  directives: [
+                    {
+                      name: "b-toggle",
+                      rawName: "v-b-toggle.accordion-1",
+                      modifiers: { "accordion-1": true }
+                    }
+                  ],
+                  attrs: { block: "", variant: "info" }
+                },
+                [_vm._v("Step 1: Your details")]
+              )
             ],
             1
           ),
@@ -50674,65 +50913,37 @@ var render = function() {
               _c(
                 "b-card-body",
                 [
-                  _vm.show
-                    ? _c(
-                        "b-form",
-                        {
-                          staticClass: "form-collapse",
-                          on: { submit: _vm.onSubmit }
-                        },
+                  _c(
+                    "b-form",
+                    {
+                      staticClass: "form-collapse",
+                      on: { submit: _vm.levelOne }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "d-inline-flex" },
                         [
                           _c(
-                            "div",
-                            { staticClass: "d-inline-flex" },
+                            "b-form-group",
+                            {
+                              attrs: {
+                                id: "input-group-1",
+                                label: "First Name:",
+                                "label-for": "input-1"
+                              }
+                            },
                             [
-                              _c(
-                                "b-form-group",
-                                {
-                                  attrs: {
-                                    id: "input-group-1",
-                                    label: "First Name:",
-                                    "label-for": "input-1"
-                                  }
-                                },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: { id: "input-1", required: "" },
-                                    model: {
-                                      value: _vm.form.name,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "name", $$v)
-                                      },
-                                      expression: "form.name"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-group",
-                                {
-                                  attrs: {
-                                    id: "input-group-2",
-                                    label: "Surname:",
-                                    "label-for": "input-2"
-                                  }
-                                },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: { id: "input-2", required: "" },
-                                    model: {
-                                      value: _vm.form.surname,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "surname", $$v)
-                                      },
-                                      expression: "form.surname"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
+                              _c("b-form-input", {
+                                attrs: { id: "input-1", required: "" },
+                                model: {
+                                  value: _vm.form.name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "name", $$v)
+                                  },
+                                  expression: "form.name"
+                                }
+                              })
                             ],
                             1
                           ),
@@ -50741,49 +50952,72 @@ var render = function() {
                             "b-form-group",
                             {
                               attrs: {
-                                id: "input-group-3",
-                                label: "Email Address:",
-                                "label-for": "input-3"
+                                id: "input-group-2",
+                                label: "Surname:",
+                                "label-for": "input-2"
                               }
                             },
                             [
                               _c("b-form-input", {
-                                attrs: {
-                                  id: "input-3",
-                                  type: "email",
-                                  required: ""
-                                },
+                                attrs: { id: "input-2", required: "" },
                                 model: {
-                                  value: _vm.form.email,
+                                  value: _vm.form.surname,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.form, "email", $$v)
+                                    _vm.$set(_vm.form, "surname", $$v)
                                   },
-                                  expression: "form.email"
+                                  expression: "form.surname"
                                 }
                               })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "d-flex flex-row-reverse" },
-                            [
-                              _c(
-                                "b-button",
-                                {
-                                  staticClass: "next",
-                                  attrs: { type: "submit" }
-                                },
-                                [_vm._v("Next >")]
-                              )
                             ],
                             1
                           )
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: {
+                            id: "input-group-3",
+                            label: "Email Address:",
+                            "label-for": "input-3"
+                          }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              id: "input-3",
+                              type: "email",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.form.email,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "email", $$v)
+                              },
+                              expression: "form.email"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex flex-row-reverse" },
+                        [
+                          _c(
+                            "b-button",
+                            { staticClass: "next", attrs: { type: "submit" } },
+                            [_vm._v("Next >")]
+                          )
+                        ],
+                        1
                       )
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ],
                 1
               )
@@ -50795,9 +51029,20 @@ var render = function() {
             "b-card-header",
             { attrs: { "header-tag": "header", role: "tab" } },
             [
-              _c("b-button", { attrs: { block: "", variant: "info" } }, [
-                _vm._v("Step 2: More comments")
-              ])
+              _c(
+                "b-button",
+                {
+                  directives: [
+                    {
+                      name: "b-toggle",
+                      rawName: "v-b-toggle.accordion-2",
+                      modifiers: { "accordion-2": true }
+                    }
+                  ],
+                  attrs: { block: "", variant: "info" }
+                },
+                [_vm._v("Step 2: More comments")]
+              )
             ],
             1
           ),
@@ -50815,91 +51060,34 @@ var render = function() {
               _c(
                 "b-card-body",
                 [
-                  _vm.show
-                    ? _c(
-                        "b-form",
-                        {
-                          staticClass: "form-collapse",
-                          on: { submit: _vm.onSubmit }
-                        },
+                  _c(
+                    "b-form",
+                    {
+                      staticClass: "form-collapse",
+                      on: { submit: _vm.levelTwo }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "d-inline-flex" },
                         [
-                          _c(
-                            "div",
-                            { staticClass: "d-inline-flex" },
-                            [
-                              _c(
-                                "b-form-group",
-                                {
-                                  attrs: {
-                                    id: "input-group-4",
-                                    label: "First Name:",
-                                    "label-for": "input-1"
-                                  }
-                                },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: { id: "input-4", required: "" },
-                                    model: {
-                                      value: _vm.form.name,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "name", $$v)
-                                      },
-                                      expression: "form.name"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "b-form-group",
-                                {
-                                  attrs: {
-                                    id: "input-group-5",
-                                    label: "Surname:",
-                                    "label-for": "input-2"
-                                  }
-                                },
-                                [
-                                  _c("b-form-input", {
-                                    attrs: { id: "input-5", required: "" },
-                                    model: {
-                                      value: _vm.form.surname,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "surname", $$v)
-                                      },
-                                      expression: "form.surname"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
                           _c(
                             "b-form-group",
                             {
                               attrs: {
-                                id: "input-group-6",
-                                label: "Email Address:",
-                                "label-for": "input-3"
+                                id: "input-group-4",
+                                label: "Telephone number"
                               }
                             },
                             [
                               _c("b-form-input", {
-                                attrs: {
-                                  id: "input-6",
-                                  type: "email",
-                                  required: ""
-                                },
+                                attrs: { id: "input-4", required: "" },
                                 model: {
-                                  value: _vm.form.email,
+                                  value: _vm.form.telephone,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.form, "email", $$v)
+                                    _vm.$set(_vm.form, "telephone", $$v)
                                   },
-                                  expression: "form.email"
+                                  expression: "form.telephone"
                                 }
                               })
                             ],
@@ -50907,24 +51095,107 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c(
-                            "div",
-                            { staticClass: "d-flex flex-row-reverse" },
+                            "b-form-group",
+                            {
+                              staticClass: "ml-4",
+                              attrs: { id: "input-group-5", label: "Gender" }
+                            },
                             [
-                              _c(
-                                "b-button",
-                                {
-                                  staticClass: "next",
-                                  attrs: { type: "submit" }
-                                },
-                                [_vm._v("Next >")]
-                              )
+                              _c("b-form-select", {
+                                attrs: { options: _vm.options },
+                                model: {
+                                  value: _vm.form.gender,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "gender", $$v)
+                                  },
+                                  expression: "form.gender"
+                                }
+                              })
                             ],
                             1
                           )
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        {
+                          attrs: { id: "input-group-6", label: "Date of birth" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "d-inline-flex" },
+                            [
+                              _c("b-form-input", {
+                                staticClass: "mr-1 dof",
+                                attrs: {
+                                  id: "input-7",
+                                  type: "text",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.form.dof.day,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form.dof, "day", $$v)
+                                  },
+                                  expression: "form.dof.day"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("b-form-input", {
+                                staticClass: "mr-1 dof",
+                                attrs: {
+                                  id: "input-8",
+                                  type: "text",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.form.dof.month,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form.dof, "month", $$v)
+                                  },
+                                  expression: "form.dof.month"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("b-form-input", {
+                                staticClass: "mr-1 dof",
+                                attrs: {
+                                  id: "input-9",
+                                  type: "text",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.form.dof.year,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form.dof, "year", $$v)
+                                  },
+                                  expression: "form.dof.year"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex flex-row-reverse" },
+                        [
+                          _c(
+                            "b-button",
+                            { staticClass: "next", attrs: { type: "submit" } },
+                            [_vm._v("Next >")]
+                          )
+                        ],
+                        1
                       )
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ],
                 1
               )
@@ -50936,9 +51207,20 @@ var render = function() {
             "b-card-header",
             { attrs: { "header-tag": "header", role: "tab" } },
             [
-              _c("b-button", { attrs: { block: "", variant: "info" } }, [
-                _vm._v("Step 3: Final comments")
-              ])
+              _c(
+                "b-button",
+                {
+                  directives: [
+                    {
+                      name: "b-toggle",
+                      rawName: "v-b-toggle.accordion-3",
+                      modifiers: { "accordion-3": true }
+                    }
+                  ],
+                  attrs: { block: "", variant: "info" }
+                },
+                [_vm._v("Step 3: Final comments")]
+              )
             ],
             1
           ),
@@ -50955,7 +51237,75 @@ var render = function() {
             [
               _c(
                 "b-card-body",
-                [_c("b-card-text", [_vm._v(_vm._s(_vm.text))])],
+                [
+                  _c(
+                    "b-form",
+                    {
+                      staticClass: "form-collapse",
+                      on: { submit: _vm.levelThree }
+                    },
+                    [
+                      _c(
+                        "b-container",
+                        { attrs: { fluid: "" } },
+                        [
+                          _c(
+                            "b-row",
+                            { attrs: { "align-v": "end" } },
+                            [
+                              _c(
+                                "b-col",
+                                [
+                                  _c("label", { attrs: { for: "textarea" } }, [
+                                    _vm._v("Comments")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("b-form-textarea", {
+                                    staticClass: "comment",
+                                    attrs: {
+                                      id: "textarea",
+                                      rows: "5",
+                                      "no-resize": ""
+                                    },
+                                    model: {
+                                      value: _vm.form.comments,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "comments", $$v)
+                                      },
+                                      expression: "form.comments"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("b-col", [
+                                _c(
+                                  "div",
+                                  { staticClass: "d-flex flex-row-reverse" },
+                                  [
+                                    _c(
+                                      "b-button",
+                                      {
+                                        staticClass: "next",
+                                        attrs: { type: "submit" }
+                                      },
+                                      [_vm._v("Next >")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
                 1
               )
             ],

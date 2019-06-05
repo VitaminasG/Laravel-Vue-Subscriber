@@ -18,9 +18,9 @@ class CreateSubscribersTable extends Migration
             $table->string('fName');
             $table->string('lName');
             $table->string('email')->unique();
-            $table->tinyInteger('mobile')->unique();
-            $table->tinyInteger('gender');
-            $table->timestamp('DOB');
+            $table->string('mobile')->unique();
+            $table->string('gender');
+            $table->string('DOB');
             $table->text('comments')->nullable()->default(NULL);
             $table->timestamps();
         });

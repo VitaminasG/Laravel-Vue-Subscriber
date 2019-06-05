@@ -9,9 +9,6 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Google Font -->
-        <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
-
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
