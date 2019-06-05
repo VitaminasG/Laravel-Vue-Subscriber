@@ -292,7 +292,6 @@
 
                 axios.post('/subscribe', data)
                     .then( response => {
-                        console.log(response.data);
                         this.showMsgBoxTwo(response.data);
                     })
                     .catch( error => {
